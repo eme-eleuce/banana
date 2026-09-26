@@ -20,14 +20,14 @@
   --color-brown-dark: var(--brown-dark);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-quattrocento);
-  --font-display: var(--font-oswald);
+  --font-sans: var(--font-lora);
+  --font-display: var(--font-roboto);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-quattrocento), Georgia, "Times New Roman", serif;
+  font-family: var(--font-lora), Georgia, "Times New Roman", serif;
 }
 
 h1,
@@ -36,7 +36,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: var(--font-oswald), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-roboto), ui-sans-serif, system-ui, sans-serif;
 }
 
 @keyframes fade-up {

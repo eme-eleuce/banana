@@ -1,18 +1,18 @@
-import { Oswald, Quattrocento } from "next/font/google";
+import { Roboto, Lora } from "next/font/google";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import "./globals.css";
 
-const oswald = Oswald({
-  variable: "--font-oswald",
+const roboto = Roboto({
+  variable: "--font-roboto",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "700"],
 });
 
-const quattrocento = Quattrocento({
-  variable: "--font-quattrocento",
+const lora = Lora({
+  variable: "--font-lora",
   subsets: ["latin"],
-  weight: ["400", "700"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata = {
@@ -25,7 +25,7 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="es"
-      className={`${oswald.variable} ${quattrocento.variable} h-full antialiased`}
+      className={`${roboto.variable} ${lora.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col font-sans">
         <Navbar />
