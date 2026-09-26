@@ -1,0 +1,51 @@
+@import "tailwindcss";
+
+:root {
+  --olive: #5c6e2f;
+  --olive-light: #7a8f45;
+  --olive-dark: #3f4c20;
+  --brown: #5c3a2a;
+  --brown-light: #7a5340;
+  --brown-dark: #3d261c;
+  --background: #f4f5f0;
+  --foreground: #2a241c;
+}
+
+@theme inline {
+  --color-olive: var(--olive);
+  --color-olive-light: var(--olive-light);
+  --color-olive-dark: var(--olive-dark);
+  --color-brown: var(--brown);
+  --color-brown-light: var(--brown-light);
+  --color-brown-dark: var(--brown-dark);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-quattrocento);
+  --font-display: var(--font-oswald);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-quattrocento), Georgia, "Times New Roman", serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-oswald), ui-sans-serif, system-ui, sans-serif;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
