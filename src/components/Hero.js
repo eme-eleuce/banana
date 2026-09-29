@@ -1,14 +1,14 @@
 import Image from "next/image";
 
 const HERO_IMAGE =
-  "/images/DSC03145_Metraje_Bananera%20Cluzon_Guayas_AFilms_10%20Septiembre%202026_500.JPG";
+  "/images/DJI_20260910083511_0166_D.JPG";
 
 export default function Hero() {
   return (
     <section className="relative flex min-h-screen items-center justify-center overflow-hidden">
       <Image
         src={HERO_IMAGE}
-        alt="Plantación de banano Cluzon"
+        alt="Vista aérea de la bananera"
         fill
         preload
         className="object-cover object-center"
