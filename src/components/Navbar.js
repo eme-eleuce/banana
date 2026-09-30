@@ -3,19 +3,27 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const links = [
   { href: "#fotos", label: "Fotos" },
   { href: "#videos", label: "Videos" },
-  { href: "#proyecto", label: "Proyecto" },
+  { href: "/proyecto", label: "Proyecto" },
   { href: "#contacto", label: "Contacto" },
 ];
 
 export default function Navbar() {
+  const pathname = usePathname();
+  const isHome = pathname === "/";
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
+    if (!isHome) {
+      setScrolled(false);
+      return;
+    }
+
     function onScroll() {
       setScrolled(window.scrollY > 40);
     }
@@ -23,23 +31,41 @@ export default function Navbar() {
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [isHome]);
+
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
 
   function closeMenu() {
     setOpen(false);
   }
 
-  const solid = scrolled || open;
-  const linkClass = solid
+  // Home: transparent → olive on scroll. Other pages: always page background.
+  const olive = isHome && (scrolled || open);
+  const light = !isHome;
+  const invertLogo = olive;
+
+  const headerBg = olive
+    ? "bg-olive-dark"
+    : light
+      ? "bg-background"
+      : "bg-transparent";
+
+  const linkClass = olive
     ? "text-white/90 hover:text-white"
     : "text-black hover:text-black/70";
-  const barClass = solid ? "bg-white" : "bg-black";
+  const barClass = olive ? "bg-white" : "bg-black";
+  const menuBg = olive
+    ? "bg-olive-dark"
+    : light
+      ? "bg-background"
+      : "bg-transparent";
+  const menuBorder = olive ? "border-white/10" : "border-black/10";
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
-        solid ? "bg-olive-dark" : "bg-transparent"
-      }`}
+      className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${headerBg}`}
     >
       <nav className="mx-auto flex h-20 max-w-6xl items-center justify-between px-4 sm:h-24 sm:px-6">
         <Link
@@ -48,11 +74,13 @@ export default function Navbar() {
           onClick={closeMenu}
         >
           <Image
-            src={solid ? "/logos/Recurso%202.png" : "/logos/Recurso%201.png"}
+            src={
+              invertLogo ? "/logos/Recurso%202.png" : "/logos/Recurso%201.png"
+            }
             alt="The Best Sustainable Banana"
             fill
             className={`object-contain object-left transition-opacity duration-300 ${
-              solid ? "brightness-0 invert" : ""
+              invertLogo ? "brightness-0 invert" : ""
             }`}
             sizes="192px"
           />
@@ -63,7 +91,7 @@ export default function Navbar() {
             <li key={link.label}>
               <Link
                 href={link.href}
-                className={`font-display text-3xl font-medium uppercase tracking-wide transition-colors duration-300 ${linkClass}`}
+                className={`relative font-display text-3xl font-medium uppercase tracking-wide transition-colors duration-300 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:origin-left after:scale-x-0 after:bg-current after:transition-transform after:duration-300 after:ease-out hover:after:scale-x-100 ${linkClass}`}
               >
                 {link.label}
               </Link>
@@ -102,21 +130,15 @@ export default function Navbar() {
       <div
         className={`overflow-hidden transition-[max-height] duration-300 ease-out md:hidden ${
           open ? "max-h-72" : "max-h-0"
-        } ${solid ? "bg-olive-dark" : "bg-transparent"}`}
+        } ${menuBg}`}
       >
-        <ul
-          className={`flex flex-col gap-1 px-4 py-3 ${
-            solid ? "border-t border-white/10" : "border-t border-black/10"
-          }`}
-        >
+        <ul className={`flex flex-col gap-1 border-t px-4 py-3 ${menuBorder}`}>
           {links.map((link) => (
             <li key={link.label}>
               <Link
                 href={link.href}
                 onClick={closeMenu}
-                className={`block rounded-md px-3 py-3 font-display text-3xl font-medium uppercase tracking-wide transition-colors duration-300 ${linkClass} ${
-                  solid ? "hover:bg-white/10" : "hover:bg-black/5"
-                }`}
+                className={`relative block px-3 py-3 font-display text-3xl font-medium uppercase tracking-wide transition-colors duration-300 after:absolute after:bottom-2 after:left-3 after:h-[2px] after:w-[calc(100%-1.5rem)] after:origin-left after:scale-x-0 after:bg-current after:transition-transform after:duration-300 after:ease-out hover:after:scale-x-100 ${linkClass}`}
               >
                 {link.label}
               </Link>
