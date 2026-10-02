@@ -15,8 +15,8 @@ export default function Footer() {
           />
         </Link>
 
-        <p className="max-w-sm text-center text-sm leading-relaxed text-white/70 md:text-right">
-          Banana, ecología y producción sostenible.
+        <p className="max-w-sm text-center font-display text-sm font-medium uppercase tracking-[0.25em] text-white/70 md:text-right">
+          Forest Grown. Carbon Conscious.
         </p>
       </div>
 
