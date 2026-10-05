@@ -6,8 +6,10 @@ export default function Home() {
   return (
     <>
       <Hero />
-      <Intro />
-      <PhotoGallery />
+      <div className="relative z-10">
+        <Intro />
+        <PhotoGallery />
+      </div>
     </>
   );
 }

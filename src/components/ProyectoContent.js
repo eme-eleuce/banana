@@ -106,8 +106,8 @@ function FadeIn({ children, className = "", delay = 0 }) {
 function DonutChart({ percent, label, delay = 0 }) {
   const [ref, visible] = useInView(0.3);
   const animated = useCountUp(percent, visible, 1600);
-  const size = 200;
-  const stroke = 18;
+  const size = 280;
+  const stroke = 22;
   const radius = (size - stroke) / 2;
   const circumference = 2 * Math.PI * radius;
   const offset = circumference - (animated / 100) * circumference;
@@ -120,8 +120,12 @@ function DonutChart({ percent, label, delay = 0 }) {
         visible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
       }`}
     >
-      <div className="relative" style={{ width: size, height: size }}>
-        <svg width={size} height={size} className="-rotate-90" aria-hidden>
+      <div className="relative h-[200px] w-[200px] md:h-[280px] md:w-[280px]">
+        <svg
+          viewBox={`0 0 ${size} ${size}`}
+          className="h-full w-full -rotate-90"
+          aria-hidden
+        >
           <circle
             cx={size / 2}
             cy={size / 2}
@@ -145,12 +149,12 @@ function DonutChart({ percent, label, delay = 0 }) {
           />
         </svg>
         <div className="absolute inset-0 flex items-center justify-center">
-          <span className="font-display text-4xl font-bold text-olive sm:text-5xl">
+          <span className="font-display text-4xl font-bold text-olive md:text-5xl lg:text-6xl">
             {animated.toFixed(1)}%
           </span>
         </div>
       </div>
-      <p className="mt-5 max-w-[14rem] font-sans text-base leading-snug text-brown sm:text-lg">
+      <p className="mt-5 max-w-[14rem] font-sans text-base leading-snug text-brown sm:text-lg md:max-w-[18rem] md:text-xl">
         {label}
       </p>
     </div>
@@ -357,44 +361,19 @@ export default function ProyectoContent() {
         </FadeIn>
 
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
-          {componentes.map((item, index) => {
-            const brown = index % 2 === 1;
-            return (
-              <FadeIn key={item} delay={index * 120}>
-                <article
-                  className={`group flex h-full flex-col p-7 transition-all duration-300 hover:-translate-y-1 sm:p-8 ${
-                    brown
-                      ? "border border-brown/25 bg-brown-dark text-white hover:border-brown-light"
-                      : "border border-olive/20 bg-[#f7f8f3] hover:border-olive/40 hover:bg-white"
-                  }`}
-                >
-                  <span
-                    className={`font-display text-5xl font-bold leading-none transition-colors duration-300 ${
-                      brown
-                        ? "text-white/25 group-hover:text-white/40"
-                        : "text-olive/25 group-hover:text-olive/40"
-                    }`}
-                  >
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-                  <div
-                    className={`my-5 h-px w-10 transition-all duration-300 group-hover:w-16 ${
-                      brown
-                        ? "bg-olive-light/70 group-hover:bg-olive-light"
-                        : "bg-brown/40 group-hover:bg-olive"
-                    }`}
-                  />
-                  <p
-                    className={`font-sans text-base leading-relaxed text-justify sm:text-lg ${
-                      brown ? "text-white/85" : "text-foreground/80"
-                    }`}
-                  >
-                    {item}
-                  </p>
-                </article>
-              </FadeIn>
-            );
-          })}
+          {componentes.map((item, index) => (
+            <FadeIn key={item} delay={index * 120}>
+              <article className="group flex h-full flex-col border border-olive-dark/30 bg-olive p-7 transition-all duration-300 hover:-translate-y-1 hover:bg-olive-dark sm:p-8">
+                <span className="font-display text-5xl font-bold leading-none text-white/25 transition-colors duration-300 group-hover:text-white/40">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <div className="my-5 h-px w-10 bg-white/40 transition-all duration-300 group-hover:w-16 group-hover:bg-white/70" />
+                <p className="font-sans text-base leading-relaxed text-justify text-white/90 sm:text-lg">
+                  {item}
+                </p>
+              </article>
+            </FadeIn>
+          ))}
         </div>
       </div>
     </article>

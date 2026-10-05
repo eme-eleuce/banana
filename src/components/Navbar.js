@@ -6,10 +6,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const links = [
+  { href: "/", label: "Home" },
   { href: "/#fotos", label: "Fotos" },
   { href: "/#videos", label: "Videos" },
   { href: "/proyecto", label: "Proyecto" },
-  { href: "/#contacto", label: "Contacto" },
+  { href: "/contacto", label: "Contacto" },
 ];
 
 export default function Navbar() {
@@ -44,7 +45,8 @@ export default function Navbar() {
   // Home: transparent → olive on scroll. Other pages: always page background.
   const olive = isHome && (scrolled || open);
   const light = !isHome;
-  const invertLogo = olive;
+  // White Recurso 2 on home (video / olive). Colored Recurso 1 on light pages.
+  const whiteLogo = !light;
 
   const headerBg = olive
     ? "bg-olive-dark"
@@ -52,16 +54,16 @@ export default function Navbar() {
       ? "bg-background"
       : "bg-transparent";
 
-  const linkClass = olive
-    ? "text-white/90 hover:text-white"
-    : "text-black hover:text-black/70";
-  const barClass = olive ? "bg-white" : "bg-black";
+  const linkClass = light
+    ? "text-black hover:text-black/70"
+    : "text-white/90 hover:text-white";
+  const barClass = light ? "bg-black" : "bg-white";
   const menuBg = olive
     ? "bg-olive-dark"
     : light
       ? "bg-background"
       : "bg-transparent";
-  const menuBorder = olive ? "border-white/10" : "border-black/10";
+  const menuBorder = light ? "border-black/10" : "border-white/10";
 
   return (
     <header
@@ -75,12 +77,13 @@ export default function Navbar() {
         >
           <Image
             src={
-              invertLogo ? "/logos/Recurso%202.png" : "/logos/Recurso%201.png"
+              whiteLogo ? "/logos/Recurso%202.png" : "/logos/Recurso%201.png"
             }
             alt="The Best Sustainable Banana"
             fill
+            loading="eager"
             className={`object-contain object-left transition-opacity duration-300 ${
-              invertLogo ? "brightness-0 invert" : ""
+              whiteLogo ? "brightness-0 invert" : ""
             }`}
             sizes="192px"
           />
@@ -91,7 +94,7 @@ export default function Navbar() {
             <li key={link.label}>
               <Link
                 href={link.href}
-                className={`relative font-display text-3xl font-medium uppercase tracking-wide transition-colors duration-300 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:origin-left after:scale-x-0 after:bg-current after:transition-transform after:duration-300 after:ease-out hover:after:scale-x-100 ${linkClass}`}
+                className={`relative font-display text-xl font-medium uppercase tracking-wide transition-colors duration-300 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:origin-left after:scale-x-0 after:bg-current after:transition-transform after:duration-300 after:ease-out hover:after:scale-x-100 md:text-2xl ${linkClass}`}
               >
                 {link.label}
               </Link>
@@ -138,7 +141,7 @@ export default function Navbar() {
               <Link
                 href={link.href}
                 onClick={closeMenu}
-                className={`relative block px-3 py-3 font-display text-3xl font-medium uppercase tracking-wide transition-colors duration-300 after:absolute after:bottom-2 after:left-3 after:h-[2px] after:w-[calc(100%-1.5rem)] after:origin-left after:scale-x-0 after:bg-current after:transition-transform after:duration-300 after:ease-out hover:after:scale-x-100 ${linkClass}`}
+                className={`relative block px-3 py-3 font-display text-xl font-medium uppercase tracking-wide transition-colors duration-300 after:absolute after:bottom-2 after:left-3 after:h-[2px] after:w-[calc(100%-1.5rem)] after:origin-left after:scale-x-0 after:bg-current after:transition-transform after:duration-300 after:ease-out hover:after:scale-x-100 ${linkClass}`}
               >
                 {link.label}
               </Link>
