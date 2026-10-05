@@ -14,7 +14,7 @@ export default function Hero() {
         preload="metadata"
         poster="/videos/hero-poster.jpg"
       >
-        <source src="/videos/hero-banana.mp4" type="video/mp4" />
+        <source src="/videos/hero.mp4" type="video/mp4" />
       </video>
     </section>
   );

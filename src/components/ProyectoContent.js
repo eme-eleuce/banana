@@ -4,10 +4,10 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
 const PLANTING_IMAGE =
-  "/images/DSC04710_Metraje_Bananera%20Cluzon_Guayas_AFilms_10%20Septiembre%202026_300.JPG";
+  "/images/dsc04710-metraje-bananera-cluzon-guayas-afilms-10-septiembre-2026-300.webp";
 
 const WORKER_IMAGE =
-  "/images/4U7A8025_Metraje_Bananera%20Cluzon_15%20Sep%202026_5DSR%20(1).jpg";
+  "/images/4u7a8025-metraje-bananera-cluzon-15-sep-2026-5dsr-1.webp";
 
 const percentStats = [
   {
