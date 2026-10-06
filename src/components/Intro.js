@@ -42,7 +42,7 @@ function FadeIn({ children, className = "", delay = 0 }) {
 export default function Intro() {
   return (
     <section id="intro" className="scroll-mt-24 bg-background">
-      <div className="mx-auto max-w-3xl px-6 pb-20 pt-10 sm:px-8 md:pb-28 md:pt-14">
+      <div className="mx-auto max-w-3xl px-6 pb-10 pt-8 sm:px-8 md:pb-14 md:pt-10">
         <FadeIn className="text-center">
           <div className="relative mx-auto h-32 w-48 sm:h-40 sm:w-56">
             <Image

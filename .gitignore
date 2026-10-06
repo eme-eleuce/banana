@@ -21,6 +21,7 @@
 /build
 
 images-raw/
+videos-raw/
 
 # debug
 npm-debug.log*

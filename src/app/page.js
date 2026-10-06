@@ -9,8 +9,8 @@ export default function Home() {
       <Hero />
       <div className="relative z-10">
         <Intro />
-        <PhotoGallery />
         <VideoSection />
+        <PhotoGallery />
       </div>
     </>
   );

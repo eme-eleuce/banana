@@ -59,10 +59,10 @@ export default function PhotoGallery() {
   }, []);
 
   return (
-    <section className="bg-background py-20 md:py-28">
+    <section className="bg-background py-10 md:py-14">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <FadeIn>
-          <div className="mb-10 flex flex-wrap items-end justify-between gap-4 md:mb-14">
+          <div className="mb-8 flex flex-wrap items-end justify-between gap-4 md:mb-10">
             <h2 className="font-display text-3xl font-bold tracking-tight text-olive-dark sm:text-4xl">
               Galería de fotos
             </h2>
@@ -120,7 +120,7 @@ export default function PhotoGallery() {
         </FadeIn>
 
         <FadeIn delay={240}>
-          <div className="mt-4 grid grid-cols-4 gap-2 sm:grid-cols-8 sm:gap-3">
+          <div className="mt-4 grid grid-cols-5 gap-2 sm:gap-3">
             {homePhotos.map((photo, index) => (
               <button
                 key={photo.src}

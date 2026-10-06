@@ -39,10 +39,6 @@ export const photos = [
     alt: "",
   },
   {
-    src: "/images/dsc03145-metraje-bananera-cluzon-guayas-afilms-10-septiembre-2026-500.webp",
-    alt: "",
-  },
-  {
     src: "/images/dsc04599-metraje-bananera-cluzon-guayas-afilms-10-septiembre-2026-300.webp",
     alt: "",
   },
@@ -68,4 +64,4 @@ export const photos = [
 ];
 
 /** Subset used by the home carousel */
-export const homePhotos = photos.slice(0, 8);
+export const homePhotos = photos.slice(0, 5);
