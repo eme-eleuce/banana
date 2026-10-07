@@ -47,6 +47,7 @@ function formatTime(seconds) {
 function VideoPlayer({ src, poster, languages = null }) {
   const videoRef = useRef(null);
   const playerRef = useRef(null);
+  const hideTimerRef = useRef(null);
   const [source, setSource] = useState(src);
   const [lang, setLang] = useState(languages?.[0]?.id ?? null);
   const [playing, setPlaying] = useState(false);
@@ -56,6 +57,28 @@ function VideoPlayer({ src, poster, languages = null }) {
   const [duration, setDuration] = useState(0);
   const [current, setCurrent] = useState(0);
   const [showControls, setShowControls] = useState(true);
+
+  const clearHideTimer = useCallback(() => {
+    if (hideTimerRef.current) {
+      clearTimeout(hideTimerRef.current);
+      hideTimerRef.current = null;
+    }
+  }, []);
+
+  const scheduleHideControls = useCallback(() => {
+    clearHideTimer();
+    hideTimerRef.current = setTimeout(() => {
+      const video = videoRef.current;
+      if (video && !video.paused) setShowControls(false);
+    }, 2500);
+  }, [clearHideTimer]);
+
+  const revealControls = useCallback(() => {
+    setShowControls(true);
+    const video = videoRef.current;
+    if (video && !video.paused) scheduleHideControls();
+    else clearHideTimer();
+  }, [scheduleHideControls, clearHideTimer]);
 
   useEffect(() => {
     setSource(src);
@@ -70,9 +93,20 @@ function VideoPlayer({ src, poster, languages = null }) {
       setProgress(video.duration ? (video.currentTime / video.duration) * 100 : 0);
     };
     const onMeta = () => setDuration(video.duration || 0);
-    const onPlay = () => setPlaying(true);
-    const onPause = () => setPlaying(false);
-    const onEnded = () => setPlaying(false);
+    const onPlay = () => {
+      setPlaying(true);
+      scheduleHideControls();
+    };
+    const onPause = () => {
+      setPlaying(false);
+      clearHideTimer();
+      setShowControls(true);
+    };
+    const onEnded = () => {
+      setPlaying(false);
+      clearHideTimer();
+      setShowControls(true);
+    };
 
     video.addEventListener("timeupdate", onTime);
     video.addEventListener("loadedmetadata", onMeta);
@@ -86,8 +120,9 @@ function VideoPlayer({ src, poster, languages = null }) {
       video.removeEventListener("play", onPlay);
       video.removeEventListener("pause", onPause);
       video.removeEventListener("ended", onEnded);
+      clearHideTimer();
     };
-  }, [source]);
+  }, [source, scheduleHideControls, clearHideTimer]);
 
   useEffect(() => {
     const syncFullscreen = () => {
@@ -96,6 +131,7 @@ function VideoPlayer({ src, poster, languages = null }) {
         document.fullscreenElement === player ||
         document.webkitFullscreenElement === player;
       setFullscreen(Boolean(active));
+      if (active) revealControls();
     };
 
     document.addEventListener("fullscreenchange", syncFullscreen);
@@ -104,7 +140,7 @@ function VideoPlayer({ src, poster, languages = null }) {
       document.removeEventListener("fullscreenchange", syncFullscreen);
       document.removeEventListener("webkitfullscreenchange", syncFullscreen);
     };
-  }, []);
+  }, [revealControls]);
 
   const togglePlay = useCallback(async () => {
     const video = videoRef.current;
@@ -126,7 +162,8 @@ function VideoPlayer({ src, poster, languages = null }) {
     if (!video) return;
     video.muted = !video.muted;
     setMuted(video.muted);
-  }, []);
+    revealControls();
+  }, [revealControls]);
 
   const toggleFullscreen = useCallback(async () => {
     const player = playerRef.current;
@@ -151,16 +188,20 @@ function VideoPlayer({ src, poster, languages = null }) {
     }
   }, []);
 
-  const seek = useCallback((event) => {
-    const video = videoRef.current;
-    if (!video || !video.duration) return;
-    const rect = event.currentTarget.getBoundingClientRect();
-    const ratio = Math.min(
-      1,
-      Math.max(0, (event.clientX - rect.left) / rect.width),
-    );
-    video.currentTime = ratio * video.duration;
-  }, []);
+  const seek = useCallback(
+    (event) => {
+      const video = videoRef.current;
+      if (!video || !video.duration) return;
+      const rect = event.currentTarget.getBoundingClientRect();
+      const ratio = Math.min(
+        1,
+        Math.max(0, (event.clientX - rect.left) / rect.width),
+      );
+      video.currentTime = ratio * video.duration;
+      revealControls();
+    },
+    [revealControls],
+  );
 
   const changeLanguage = useCallback(
     (option) => {
@@ -174,6 +215,7 @@ function VideoPlayer({ src, poster, languages = null }) {
       setPlaying(false);
       setProgress(0);
       setCurrent(0);
+      setShowControls(true);
 
       requestAnimationFrame(() => {
         const next = videoRef.current;
@@ -217,10 +259,13 @@ function VideoPlayer({ src, poster, languages = null }) {
       <div
         ref={playerRef}
         className={`relative w-full overflow-hidden bg-olive-dark ${
-          fullscreen ? "h-svh max-h-none" : "aspect-video max-h-[70svh]"
+          fullscreen
+            ? `h-svh max-h-none ${showControls || !playing ? "cursor-auto" : "cursor-none"}`
+            : "aspect-video max-h-[70svh]"
         }`}
-        onMouseEnter={() => setShowControls(true)}
-        onMouseLeave={() => setShowControls(playing ? false : true)}
+        onMouseMove={revealControls}
+        onMouseEnter={revealControls}
+        onTouchStart={revealControls}
       >
         <video
           ref={videoRef}
@@ -255,7 +300,9 @@ function VideoPlayer({ src, poster, languages = null }) {
 
         <div
           className={`absolute inset-x-0 bottom-0 z-20 bg-linear-to-t from-black/70 via-black/35 to-transparent px-4 pb-4 pt-10 transition-opacity duration-300 sm:px-5 ${
-            showControls || !playing ? "opacity-100" : "opacity-0"
+            showControls || !playing
+              ? "opacity-100"
+              : "pointer-events-none opacity-0"
           }`}
         >
           <button
@@ -359,9 +406,12 @@ export default function VideoSection() {
     <section id="videos" className="scroll-mt-24 bg-background py-10 md:py-14">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <FadeIn>
-          <h2 className="mb-8 font-display text-3xl font-bold tracking-tight text-olive-dark sm:text-4xl md:mb-10">
+          <h2 className="font-display text-3xl font-bold tracking-tight text-olive-dark sm:text-4xl">
             Videos
           </h2>
+          <p className="mt-3 mb-8 font-display text-base font-medium text-brown sm:text-lg md:mb-10">
+            Our 40-Second Challenge
+          </p>
         </FadeIn>
 
         <div className="space-y-12 md:space-y-14">
